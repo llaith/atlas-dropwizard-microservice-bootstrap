@@ -1,0 +1,34 @@
+serviceInstance: HelloWorld1
+
+server:
+  applicationConnectors:
+  - type: http
+    port: 9090
+  adminConnectors:
+  - type: http
+    port: 9091
+  requestLog:
+    appenders:
+      - type: file
+        currentLogFilename: log/atlas-helloworld-access.log
+        threshold: ALL
+        archive: true
+        archivedLogFilenamePattern: log/atlas-helloworld-access.%d.log.gz
+        archivedFileCount: 14
+        timeZone: UTC
+        #logFormat: # TODO
+
+logging:
+  level: INFO
+  loggers:
+    io.dropwizard: INFO
+  appenders:
+    - type: console
+    - type: file
+      currentLogFilename: log/atlas-helloworld-app.log
+      threshold: ALL
+      archive: true
+      archivedLogFilenamePattern: log/atlas-helloworld-app-%d.log.gz
+      archivedFileCount: 5
+      timeZone: UTC
+      #logFormat: # TODO
