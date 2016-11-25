@@ -3,10 +3,10 @@ serviceInstance: HelloWorld1
 server:
   applicationConnectors:
   - type: http
-    port: 9090
+    port: 10090
   adminConnectors:
   - type: http
-    port: 9091
+    port: 10091
   requestLog:
     appenders:
       - type: file

@@ -8,13 +8,13 @@ import tkt.atlas.helloworld.api.domain.Person;
 import java.util.List;
 
 
-public class HelloWorldServiceAsyncImpl implements HelloWorldAsyncService {
+public class HelloWorldAsyncServiceImpl implements HelloWorldAsyncService {
 
     private final HelloWorldService service;
 
-    public HelloWorldServiceAsyncImpl(final HelloWorldService service) {
+    public HelloWorldAsyncServiceImpl(final String creator) {
 
-        this.service = service;
+        this.service = new HelloWorldServiceImpl(creator);
 
     }
 

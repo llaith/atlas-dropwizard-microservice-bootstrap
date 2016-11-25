@@ -1,6 +1,7 @@
 package tkt.atlas.helloworld.webclient;
 
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import rx.Observable;
@@ -23,7 +24,8 @@ public class HelloWorldRemoteAsyncClient implements HelloWorldAsyncService {
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(JacksonConverterFactory.create()) // order matters, this should be last
+                .addConverterFactory(JacksonConverterFactory.create()) // order matters, this should be after the scalar one
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
         this.retrofit = retrofit.create(HelloWorldRetrofitAsyncClient.class);

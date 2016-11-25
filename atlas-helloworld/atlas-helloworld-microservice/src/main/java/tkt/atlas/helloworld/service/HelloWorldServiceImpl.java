@@ -13,13 +13,13 @@ import java.util.Map;
 
 public class HelloWorldServiceImpl implements HelloWorldService {
 
-    private final String serviceInstance;
+    private final String creator;
 
     private final Map<String,Person> persons = new HashMap<>();
 
     public HelloWorldServiceImpl(final String creator) {
 
-        this.serviceInstance = creator;
+        this.creator = creator;
 
     }
 
@@ -27,7 +27,7 @@ public class HelloWorldServiceImpl implements HelloWorldService {
     public String createPerson(final Person person) {
 
         person.setId(UuidUtil.uuid());
-        person.setUpdatedBy(this.serviceInstance);
+        person.setUpdatedBy(this.creator);
         person.setUpdatedAt(new Date());
 
         this.persons.put(person.getId(), person);
@@ -49,7 +49,7 @@ public class HelloWorldServiceImpl implements HelloWorldService {
         if (!this.persons.containsKey(person.getId()))
             throw new RuntimeException("No person exists with id: " + person.getId());
 
-        person.setUpdatedBy(this.serviceInstance);
+        person.setUpdatedBy(this.creator);
         person.setUpdatedAt(new Date(new Date().getTime() + 1)); // test is too fast to get a new date!
 
         this.persons.put(person.getId(), person);

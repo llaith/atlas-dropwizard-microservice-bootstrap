@@ -2,24 +2,26 @@ package tkt.atlas.helloworld.service;
 
 import org.junit.Before;
 import org.junit.Test;
-import tkt.atlas.helloworld.api.HelloWorldService;
+import tkt.atlas.helloworld.api.HelloWorldAsyncService;
 import tkt.atlas.helloworld.api.domain.Person;
 
 import java.util.Date;
 
 import static org.junit.Assert.*;
+import static tkt.util.ObservableUtil.firstFrom;
+import static tkt.util.ObservableUtil.testSubscriptionOn;
 
 /**
  *
  */
-public class HelloWorldServiceTest {
+public class HelloWorldAsyncServiceTest {
 
-    private HelloWorldService service;
+    private HelloWorldAsyncService service;
 
     @Before
     public void setup() {
 
-        this.service = new HelloWorldServiceImpl("Tester");
+        this.service = new HelloWorldAsyncServiceImpl("Tester");
 
     }
 
@@ -31,11 +33,11 @@ public class HelloWorldServiceTest {
         assertNull(person.getId());
 
         // save it and check the id is set
-        final String id = this.service.createPerson(person);
+        final String id = firstFrom(testSubscriptionOn(service.createPerson(person)));
         assertNotNull(id);
 
         // read the person back and check the details
-        final Person read = this.service.readPerson(id);
+        final Person read = firstFrom(testSubscriptionOn(this.service.readPerson(id)));
         assertNotNull(read);
         assertEquals(person.getName(), read.getName());
         assertEquals(read.getUpdatedBy(), "Tester");
@@ -46,15 +48,15 @@ public class HelloWorldServiceTest {
 
         // update and check its worked 
         read.setName("Mr Plod");
-        final Person updated = this.service.updatePerson(read);
+        final Person updated = firstFrom(testSubscriptionOn(this.service.updatePerson(read)));
         assertNotNull(updated);
         assertEquals(read.getId(), updated.getId());
         assertEquals(read.getName(), updated.getName());
         assertNotEquals(createDate, updated.getUpdatedAt());
 
         // delete and check it's gone
-        this.service.deletePerson(updated.getId());
-        final Person deleted = this.service.readPerson(updated.getId());
+        testSubscriptionOn(this.service.deletePerson(updated.getId()));
+        final Person deleted = firstFrom(testSubscriptionOn(this.service.readPerson(updated.getId())));
         assertNull(deleted);
 
     }
